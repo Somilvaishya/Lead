@@ -1,0 +1,506 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans);background:transparent;color:var(--color-text-primary)}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+nav{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px;border-bottom:0.5px solid var(--color-border-tertiary);padding-bottom:12px}
+.tab{padding:6px 14px;font-size:13px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);background:transparent;cursor:pointer;color:var(--color-text-secondary);transition:all .15s}
+.tab.active{background:var(--color-background-secondary);color:var(--color-text-primary);border-color:var(--color-border-primary);font-weight:500}
+.tab:hover:not(.active){background:var(--color-background-secondary)}
+.panel{display:none}.panel.active{display:block}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;margin-bottom:12px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.label{font-size:12px;color:var(--color-text-secondary);margin-bottom:4px}
+.val{font-size:22px;font-weight:500}
+.badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:var(--border-radius-md);font-weight:500}
+.badge-green{background:var(--color-background-success);color:var(--color-text-success)}
+.badge-amber{background:var(--color-background-warning);color:var(--color-text-warning)}
+.badge-red{background:var(--color-background-danger);color:var(--color-text-danger)}
+.badge-blue{background:var(--color-background-info);color:var(--color-text-info)}
+h3{font-size:15px;font-weight:500;margin-bottom:10px}
+h4{font-size:13px;font-weight:500;margin-bottom:6px;color:var(--color-text-secondary)}
+p,li{font-size:13px;line-height:1.6;color:var(--color-text-secondary)}
+ul{padding-left:14px}
+li{margin-bottom:3px}
+.row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.bar-wrap{flex:1;height:8px;background:var(--color-background-secondary);border-radius:4px;overflow:hidden}
+.bar{height:100%;border-radius:4px;transition:width .4s}
+.bar-green{background:#639922}.bar-amber{background:#BA7517}.bar-blue{background:#185FA5}.bar-teal{background:#0F6E56}.bar-purple{background:#534AB7}
+.industry-row{display:grid;grid-template-columns:140px 1fr 80px 80px 80px;gap:8px;align-items:center;padding:8px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:12px}
+.industry-row:last-child{border-bottom:none}
+.industry-head{display:grid;grid-template-columns:140px 1fr 80px 80px 80px;gap:8px;padding:4px 0 8px;font-size:11px;font-weight:500;color:var(--color-text-tertiary);border-bottom:0.5px solid var(--color-border-tertiary);text-transform:uppercase;letter-spacing:.04em}
+.hook-box{background:var(--color-background-secondary);border-left:3px solid var(--color-border-info);border-radius:0 var(--border-radius-md) var(--border-radius-md) 0;padding:10px 14px;margin:8px 0;font-size:13px;line-height:1.6;color:var(--color-text-primary);font-style:italic}
+.channel-card{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:12px 14px;margin-bottom:10px}
+.channel-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.step{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+.step:last-child{border-bottom:none}
+.step-num{width:26px;height:26px;border-radius:50%;background:var(--color-background-info);color:var(--color-text-info);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;flex-shrink:0}
+.vs-grid{display:grid;grid-template-columns:100px 1fr 1fr 1fr 1fr;gap:1px;background:var(--color-border-tertiary);border-radius:var(--border-radius-md);overflow:hidden}
+.vs-cell{background:var(--color-background-primary);padding:8px 10px;font-size:12px}
+.vs-head{background:var(--color-background-secondary);font-weight:500;font-size:11px;color:var(--color-text-secondary)}
+.vs-feature{background:var(--color-background-secondary);font-size:11px;color:var(--color-text-tertiary)}
+.vs-win{background:var(--color-background-success);color:var(--color-text-success);font-weight:500}
+.vs-lose{background:var(--color-background-danger);color:var(--color-text-danger)}
+.vs-mid{background:var(--color-background-warning);color:var(--color-text-warning)}
+.mistake{border-left:3px solid var(--color-border-danger);padding:10px 14px;margin-bottom:10px;border-radius:0 var(--border-radius-md) var(--border-radius-md) 0;background:var(--color-background-primary)}
+.fix{border-left:3px solid var(--color-border-success);padding:10px 14px;margin-bottom:10px;border-radius:0 var(--border-radius-md) var(--border-radius-md) 0;background:var(--color-background-primary)}
+.score-bar-wrap{width:100%;height:6px;background:var(--color-background-secondary);border-radius:3px;margin-top:4px}
+.geo-row{display:grid;grid-template-columns:130px 1fr 70px 70px;gap:8px;align-items:center;padding:8px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:12px}
+.geo-head{display:grid;grid-template-columns:130px 1fr 70px 70px;gap:8px;padding:4px 0 8px;font-size:11px;font-weight:500;color:var(--color-text-tertiary);border-bottom:0.5px solid var(--color-border-tertiary);text-transform:uppercase;letter-spacing:.04em}
+</style>
+
+<h2 class="sr-only">NexaFlowTech B2B ERPNext Lead Generation Strategy Dashboard — 8 sections covering industry targeting, geo, ICP, channels, outreach, positioning, funnel, and mistakes.</h2>
+
+<nav>
+  <button class="tab active" onclick="show('industries')">1. Industries</button>
+  <button class="tab" onclick="show('geo')">2. Geo Targeting</button>
+  <button class="tab" onclick="show('icp')">3. ICP</button>
+  <button class="tab" onclick="show('channels')">4. Channels</button>
+  <button class="tab" onclick="show('outreach')">5. Outreach</button>
+  <button class="tab" onclick="show('positioning')">6. Positioning</button>
+  <button class="tab" onclick="show('funnel')">7. Funnel</button>
+  <button class="tab" onclick="show('mistakes')">8. Mistakes</button>
+</nav>
+
+<!-- PANEL 1: INDUSTRIES -->
+<div id="industries" class="panel active">
+  <div class="grid3" style="margin-bottom:14px">
+    <div class="card"><div class="label">Priority industries</div><div class="val">9</div></div>
+    <div class="card"><div class="label">Avg deal size (INR)</div><div class="val">₹8–40L</div></div>
+    <div class="card"><div class="label">Avg sales cycle</div><div class="val">6–14 wks</div></div>
+  </div>
+  <div class="card">
+    <div class="industry-head">
+      <span>Industry</span><span>Lead availability</span><span>Budget</span><span>Conversion</span><span>Priority</span>
+    </div>
+    <div class="industry-row">
+      <strong>Manufacturing</strong>
+      <div><div class="bar-wrap"><div class="bar bar-green" style="width:92%"></div></div></div>
+      <span class="badge badge-green">High</span>
+      <span class="badge badge-green">High</span>
+      <span class="badge badge-green">🥇 #1</span>
+    </div>
+    <div class="industry-row">
+      <strong>Distribution</strong>
+      <div><div class="bar-wrap"><div class="bar bar-green" style="width:85%"></div></div></div>
+      <span class="badge badge-green">High</span>
+      <span class="badge badge-green">High</span>
+      <span class="badge badge-green">🥈 #2</span>
+    </div>
+    <div class="industry-row">
+      <strong>FMCG</strong>
+      <div><div class="bar-wrap"><div class="bar bar-blue" style="width:78%"></div></div></div>
+      <span class="badge badge-green">High</span>
+      <span class="badge badge-amber">Medium</span>
+      <span class="badge badge-blue">🥉 #3</span>
+    </div>
+    <div class="industry-row">
+      <strong>Textile</strong>
+      <div><div class="bar-wrap"><div class="bar bar-blue" style="width:75%"></div></div></div>
+      <span class="badge badge-green">High</span>
+      <span class="badge badge-amber">Medium</span>
+      <span class="badge badge-blue">#4</span>
+    </div>
+    <div class="industry-row">
+      <strong>Real Estate</strong>
+      <div><div class="bar-wrap"><div class="bar bar-amber" style="width:65%"></div></div></div>
+      <span class="badge badge-amber">Medium</span>
+      <span class="badge badge-green">High</span>
+      <span class="badge badge-blue">#5</span>
+    </div>
+    <div class="industry-row">
+      <strong>EV Manufacturers</strong>
+      <div><div class="bar-wrap"><div class="bar bar-teal" style="width:60%"></div></div></div>
+      <span class="badge badge-amber">Medium</span>
+      <span class="badge badge-green">High</span>
+      <span class="badge badge-amber">#6</span>
+    </div>
+    <div class="industry-row">
+      <strong>HRMS-heavy Orgs</strong>
+      <div><div class="bar-wrap"><div class="bar bar-teal" style="width:70%"></div></div></div>
+      <span class="badge badge-green">High</span>
+      <span class="badge badge-amber">Medium</span>
+      <span class="badge badge-amber">#7</span>
+    </div>
+    <div class="industry-row">
+      <strong>Government / PSU</strong>
+      <div><div class="bar-wrap"><div class="bar bar-purple" style="width:50%"></div></div></div>
+      <span class="badge badge-amber">Medium</span>
+      <span class="badge badge-green">High</span>
+      <span class="badge badge-red">#8 (slow)</span>
+    </div>
+    <div class="industry-row">
+      <strong>CRM-driven SMBs</strong>
+      <div><div class="bar-wrap"><div class="bar bar-purple" style="width:80%"></div></div></div>
+      <span class="badge badge-green">High</span>
+      <span class="badge badge-amber">Medium</span>
+      <span class="badge badge-amber">#9</span>
+    </div>
+  </div>
+  <div class="card">
+    <h3>Why Manufacturing & Distribution lead</h3>
+    <ul>
+      <li>Highest pain — inventory chaos, multi-location stock, BOM complexity — ERPNext solves all three natively</li>
+      <li>Decision makers are reachable (Operations/Finance heads) and budget is pre-approved in digital transformation cycles</li>
+      <li>ERPNext has 3,000+ production implementations globally — proof is easy to show</li>
+      <li>Tally and legacy ERP migrations are happening at scale in 2024–26 cohort in India</li>
+    </ul>
+  </div>
+</div>
+
+<!-- PANEL 2: GEO -->
+<div id="geo" class="panel">
+  <div class="card">
+    <div class="geo-head"><span>Market</span><span>Why target</span><span>Competition</span><span>Pricing edge</span></div>
+    <div class="geo-row">
+      <strong>India (Tier 1)</strong><span>Largest ERPNext base; Tally migration wave; high volume</span><span class="badge badge-red">High</span><span class="badge badge-amber">Moderate</span>
+    </div>
+    <div class="geo-row">
+      <strong>India (Tier 2/3)</strong><span>Underserved; Manufacturing clusters — Ludhiana, Surat, Coimbatore</span><span class="badge badge-green">Low</span><span class="badge badge-green">High</span>
+    </div>
+    <div class="geo-row">
+      <strong>Middle East (UAE, KSA)</strong><span>VAT compliance mandate; Vision 2030 ERP push; high budgets</span><span class="badge badge-amber">Medium</span><span class="badge badge-green">Very High</span>
+    </div>
+    <div class="geo-row">
+      <strong>Southeast Asia</strong><span>Manufacturing boom in Vietnam, Indonesia; ERPNext community growing</span><span class="badge badge-green">Low</span><span class="badge badge-green">Very High</span>
+    </div>
+    <div class="geo-row">
+      <strong>Africa (Nigeria, Kenya)</strong><span>Fast-growing Frappe community; low competition; dollar billing possible</span><span class="badge badge-green">Low</span><span class="badge badge-green">Very High</span>
+    </div>
+    <div class="geo-row">
+      <strong>USA / Canada</strong><span>Large budgets; long sales cycles; need local credibility signals</span><span class="badge badge-red">High</span><span class="badge badge-green">Very High</span>
+    </div>
+    <div class="geo-row">
+      <strong>Europe (DACH, UK)</strong><span>GDPR-compliant ERPNext demand; mid-market gap between SAP & spreadsheets</span><span class="badge badge-amber">Medium</span><span class="badge badge-green">High</span>
+    </div>
+  </div>
+  <div class="grid2">
+    <div class="card">
+      <h3>Recommended sequence</h3>
+      <p style="margin-bottom:8px">Start where you win fastest, then expand:</p>
+      <ul>
+        <li><strong>Month 1–3:</strong> India Tier 2/3 Manufacturing (quick wins, case studies)</li>
+        <li><strong>Month 3–6:</strong> UAE + KSA (use India case studies as social proof)</li>
+        <li><strong>Month 6–12:</strong> SEA + Africa (Upwork/community channels)</li>
+        <li><strong>Year 2:</strong> US/EU via partnerships with Frappe certified partners</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Pricing advantage (India vs global)</h3>
+      <ul>
+        <li>India client: ₹5–15L implementation</li>
+        <li>UAE/Gulf client: $15,000–50,000 equivalent</li>
+        <li>US/EU client: $25,000–100,000+ equivalent</li>
+        <li>Charging global rates while operating at India costs = 4–8x margin advantage</li>
+        <li>Use Upwork + LinkedIn for inbound from global clients</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 3: ICP -->
+<div id="icp" class="panel">
+  <div class="grid2" style="margin-bottom:12px">
+    <div class="card">
+      <h3>Company profile</h3>
+      <div class="row" style="margin-top:6px"><span class="label" style="width:110px;margin:0">Employees</span><span class="badge badge-blue">50–500</span></div>
+      <div class="row"><span class="label" style="width:110px;margin:0">Annual revenue</span><span class="badge badge-blue">₹5Cr – ₹200Cr (or $2M–$50M global)</span></div>
+      <div class="row"><span class="label" style="width:110px;margin:0">Current system</span><span class="badge badge-amber">Tally / Excel / legacy ERP</span></div>
+      <div class="row"><span class="label" style="width:110px;margin:0">Growth stage</span><span class="badge badge-green">Scaling / Series A–B</span></div>
+      <div class="row"><span class="label" style="width:110px;margin:0">Locations</span><span class="badge badge-amber">Multi-branch / warehouse</span></div>
+    </div>
+    <div class="card">
+      <h3>Decision makers to target</h3>
+      <ul style="margin-top:4px">
+        <li><strong>CEO / MD</strong> — for SMBs under ₹25Cr (single decision-maker)</li>
+        <li><strong>CFO / Finance Head</strong> — controls ERP budget, cares about ROI</li>
+        <li><strong>CTO / IT Head</strong> — evaluates technical fit, open-source preference</li>
+        <li><strong>Operations Head</strong> — feels the daily pain; your internal champion</li>
+        <li><strong>Purchase / SCM Manager</strong> — for inventory-heavy targets</li>
+      </ul>
+      <p style="margin-top:8px;font-style:italic">Tip: Start with Ops Head as champion, close with CFO/CEO.</p>
+    </div>
+  </div>
+  <div class="card">
+    <h3>Pain points by industry</h3>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px">
+      <div><h4>Manufacturing</h4><ul><li>No real-time BOM/production tracking</li><li>Manual quality control logs</li><li>Inventory discrepancies across shifts</li><li>Payroll + shop floor disconnect</li></ul></div>
+      <div><h4>Distribution / Trading</h4><ul><li>Stock-out and overstock cycles</li><li>Margin erosion from manual pricing</li><li>No multi-warehouse visibility</li><li>Delayed reconciliation with suppliers</li></ul></div>
+      <div style="margin-top:8px"><h4>FMCG</h4><ul><li>Batch tracking / expiry management</li><li>Distributor management complexity</li><li>Demand forecasting gaps</li><li>GST + e-Invoice compliance drag</li></ul></div>
+      <div style="margin-top:8px"><h4>Real Estate</h4><ul><li>Project cost overruns (no tracking)</li><li>Contractor billing disputes</li><li>CRM → Booking → Finance disconnect</li><li>Compliance & milestone reporting</li></ul></div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 4: CHANNELS -->
+<div id="channels" class="panel">
+  <div class="channel-card">
+    <div class="channel-head"><h3>LinkedIn (Organic + Outbound)</h3><span class="badge badge-green">Best for ERP</span></div>
+    <div class="grid2">
+      <div><h4>Organic strategy</h4><ul><li>Post 3x/week: ERP transformation stories, before/after case studies, ROI calculators</li><li>Use founder's personal profile — not company page (3x reach)</li><li>Target: "Operations Manager India Manufacturing" hashtags</li><li>Comment on CFO/CTO posts in your target industries</li></ul></div>
+      <div><h4>Outbound (Sales Navigator)</h4><ul><li>Filter: Industry + Company size 50–500 + Title (CFO, Ops Head, IT Manager)</li><li>Connection request → value message → follow-up after 5 days</li><li>Send only 20–30 requests/day to avoid restriction</li><li>Message angle: pain-specific, no pitch in first message</li></ul></div>
+    </div>
+  </div>
+  <div class="channel-card">
+    <div class="channel-head"><h3>Cold Email</h3><span class="badge badge-amber">High volume, lower conversion</span></div>
+    <ul><li>Use Apollo.io or Hunter.io to find verified emails of CFOs/Ops Heads in target industries</li><li>Send from a warmed domain (not your main domain — protect deliverability)</li><li>Subject lines: "Your competitors in [city] already migrated from Tally" / "Reducing ₹X inventory loss with ERPNext"</li><li>Sequence: Day 1 email → Day 4 follow-up → Day 9 breakup email</li><li>Open rate target: 35%+, Reply rate: 4–8% is good for ERP cold email</li></ul>
+  </div>
+  <div class="channel-card">
+    <div class="channel-head"><h3>Google Ads + SEO</h3><span class="badge badge-blue">Best for inbound intent</span></div>
+    <div class="grid2">
+      <div><h4>High-intent keywords to bid on</h4><ul><li>"ERPNext implementation partner India"</li><li>"Frappe ERPNext customization"</li><li>"Tally to ERP migration"</li><li>"Manufacturing ERP software India"</li><li>"ERPNext for [industry] India"</li></ul></div>
+      <div><h4>SEO content strategy</h4><ul><li>Publish comparison articles: ERPNext vs SAP, ERPNext vs Odoo</li><li>Industry-specific landing pages (Manufacturing ERP, Textile ERP)</li><li>Case study pages with measurable outcomes (₹X saved, X% faster)</li><li>Target long-tail: "ERPNext implementation for pharmaceutical company India"</li></ul></div>
+    </div>
+  </div>
+  <div class="channel-card">
+    <div class="channel-head"><h3>Upwork / Freelancer</h3><span class="badge badge-green">Best for global leads</span></div>
+    <ul><li>Create a specialized profile: "ERPNext / Frappe Implementation Specialist" — not generic IT</li><li>Bid only on ERP projects — avoid low-budget web dev projects that dilute your profile</li><li>Aim for Top Rated Plus status — unlocks direct client access</li><li>Upwork is your fastest path to USD-paying clients in US, UAE, Europe</li><li>Response time matters: reply within 2 hours for shortlisting advantage</li></ul>
+  </div>
+  <div class="channel-card">
+    <div class="channel-head"><h3>WhatsApp + Community</h3><span class="badge badge-amber">For India warm leads</span></div>
+    <ul><li>Join industry WhatsApp groups (textile associations, MSME groups, CII chapters) — <em>provide value first</em>, never spam</li><li>Be active in Frappe Community Forum — answer technical questions, builds authority and inbound</li><li>ERPNext Discuss forum participation leads to referrals from existing users looking for implementation partners</li><li>WhatsApp automation: use for follow-up sequences only on opted-in leads (TRAI compliance)</li></ul>
+  </div>
+</div>
+
+<!-- PANEL 5: OUTREACH -->
+<div id="outreach" class="panel">
+  <div class="card">
+    <h3>Manufacturing — messaging hooks</h3>
+    <div class="hook-box">"Your production team is running 3 WhatsApp groups to track inventory. Your finance team has a different number. Let's fix that — with one system that shows real-time stock, BOM, and job cards on a single screen."</div>
+    <div class="hook-box">"How much inventory shrinkage did you accept last year as 'normal'? Our Manufacturing ERP clients typically find 8–15% of that was recoverable with better tracking."</div>
+    <div class="hook-box">"LinkedIn hook: I noticed [Company] has 4 plants across Gujarat. How are you handling multi-location inventory reconciliation today — Excel, Tally, or something custom?"</div>
+    <p style="margin-top:8px"><strong>Key angle:</strong> Lead with operational chaos → introduce ERPNext as the unifier → offer free process audit to show the gap.</p>
+  </div>
+  <div class="card">
+    <h3>FMCG — messaging hooks</h3>
+    <div class="hook-box">"Every ₹1 of expired stock that hits your warehouse floor costs you ₹3 — write-off + lost margin + compliance. ERPNext batch tracking eliminates this. Can we show you how in 20 minutes?"</div>
+    <div class="hook-box">"Your distributors are still calling your sales team for stock updates. There's a portal for that. Want to see it running live for an FMCG company similar to yours?"</div>
+    <p style="margin-top:8px"><strong>Key angle:</strong> GST/e-Invoice compliance + distributor visibility + batch/expiry tracking are the three FMCG triggers. Lead with whichever the prospect mentions first.</p>
+  </div>
+  <div class="card">
+    <h3>Real Estate — messaging hooks</h3>
+    <div class="hook-box">"Your site engineers know the actual project cost. Your finance team knows what was budgeted. Do those two numbers ever match? ERPNext bridges that gap — project costing synced with accounts in real-time."</div>
+    <div class="hook-box">"Most real estate companies we speak to lose 6–12% project margin to unapproved purchases and delayed subcontractor reconciliation. We built an ERPNext module specifically for this. 15-minute demo?"</div>
+    <p style="margin-top:8px"><strong>Key angle:</strong> Project cost visibility + CRM-to-booking-to-revenue tracking. Real estate CFOs respond to margin leakage framing.</p>
+  </div>
+  <div class="card">
+    <h3>LinkedIn outbound message template</h3>
+    <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px;font-size:13px;line-height:1.7">
+      <p><strong>Connection request note:</strong></p>
+      <p>"Hi [Name], I work with [Industry] companies to streamline their operations using ERPNext. Saw [Company] is scaling — wanted to connect with someone leading ops/finance there."</p>
+      <br>
+      <p><strong>Follow-up (Day 5, after connect):</strong></p>
+      <p>"Thanks for connecting, [Name]. Quick question — is [Company] still running on [Tally/Excel/legacy system] for inventory/finance? We recently helped a [similar company] cut their month-end close from 12 days to 3. Happy to share how if it's relevant."</p>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 6: POSITIONING -->
+<div id="positioning" class="panel">
+  <div class="card" style="margin-bottom:14px">
+    <h3>ERPNext vs competitors — positioning matrix</h3>
+    <div class="vs-grid" style="margin-top:10px">
+      <div class="vs-cell vs-head">Dimension</div>
+      <div class="vs-cell vs-head">ERPNext</div>
+      <div class="vs-cell vs-head">SAP B1</div>
+      <div class="vs-cell vs-head">Odoo</div>
+      <div class="vs-cell vs-head">Tally</div>
+      <div class="vs-cell vs-feature">Cost</div>
+      <div class="vs-cell vs-win">Open source + service fee</div>
+      <div class="vs-cell vs-lose">₹25L+ licensing</div>
+      <div class="vs-cell vs-mid">Moderate licensing</div>
+      <div class="vs-cell vs-win">Lowest</div>
+      <div class="vs-cell vs-feature">Customization</div>
+      <div class="vs-cell vs-win">Full — Python/JS</div>
+      <div class="vs-cell vs-lose">Expensive, slow</div>
+      <div class="vs-cell vs-mid">Good but costly</div>
+      <div class="vs-cell vs-lose">Very limited</div>
+      <div class="vs-cell vs-feature">Manufacturing module</div>
+      <div class="vs-cell vs-win">Native, strong</div>
+      <div class="vs-cell vs-win">Strong</div>
+      <div class="vs-cell vs-mid">Moderate</div>
+      <div class="vs-cell vs-lose">None</div>
+      <div class="vs-cell vs-feature">Indian compliance</div>
+      <div class="vs-cell vs-win">GST, TDS, e-Invoice</div>
+      <div class="vs-cell vs-mid">Needs add-ons</div>
+      <div class="vs-cell vs-mid">Community modules</div>
+      <div class="vs-cell vs-win">Best-in-class</div>
+      <div class="vs-cell vs-feature">Mobile/web access</div>
+      <div class="vs-cell vs-win">Full web + mobile</div>
+      <div class="vs-cell vs-mid">Limited</div>
+      <div class="vs-cell vs-win">Good</div>
+      <div class="vs-cell vs-lose">Desktop only</div>
+      <div class="vs-cell vs-feature">Implementation time</div>
+      <div class="vs-cell vs-win">6–14 weeks</div>
+      <div class="vs-cell vs-lose">6–18 months</div>
+      <div class="vs-cell vs-mid">3–6 months</div>
+      <div class="vs-cell vs-mid">2–4 weeks</div>
+    </div>
+  </div>
+  <div class="grid2">
+    <div class="card">
+      <h3>Irresistible offers to drive demos</h3>
+      <ul>
+        <li><strong>Free ERP Readiness Audit</strong> — 45-min session mapping their current chaos to ERPNext modules; delivers a gap report they keep regardless</li>
+        <li><strong>Industry-configured free demo</strong> — not a generic ERPNext demo, but one pre-loaded with their industry's chart of accounts, BOM structure, and workflows</li>
+        <li><strong>Pilot project (paid, small scope)</strong> — implement 1 module (e.g., Inventory or HR) in 3 weeks, then expand; reduces their risk</li>
+        <li><strong>Migration guarantee</strong> — "We migrate your Tally data or you don't pay for data migration phase" — eliminates the #1 objection</li>
+        <li><strong>ROI calculator</strong> — interactive tool showing estimated savings based on their employee count / inventory value</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Against SAP pitch</h3>
+      <ul><li>"SAP for 200 employees is like buying a Boeing 747 to commute to work. ERPNext gives you 80% of SAP's capability at 10% of the cost — and you own the code."</li></ul>
+      <h3 style="margin-top:12px">Against Odoo pitch</h3>
+      <ul><li>"Odoo's licensing grows with your users — every new employee costs more. ERPNext is user-unlimited. At 100 users, you'll save ₹8–15L/year in licensing alone."</li></ul>
+      <h3 style="margin-top:12px">Against Tally pitch</h3>
+      <ul><li>"Tally is an accounting tool that became your ERP by accident. When your operations team can't see what your finance team sees, that's a Tally problem, not a people problem."</li></ul>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 7: FUNNEL -->
+<div id="funnel" class="panel">
+  <div class="card">
+    <h3>Lead → Demo → Conversion funnel</h3>
+    <div class="step">
+      <div class="step-num">1</div>
+      <div><h4>Awareness (top of funnel)</h4><p>LinkedIn content + cold outreach + Google Ads → prospect lands on industry-specific landing page or sees your post. KPI: 500–1000 impressions/week per vertical. Tool: Buffer (scheduling), LinkedIn Sales Nav</p></div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div><h4>Lead capture</h4><p>Offer lead magnet (ROI calculator / "10 signs you've outgrown Tally" PDF) in exchange for email + phone. Or LinkedIn DM reply triggers CRM entry. Tool: Typeform or native LinkedIn Lead Gen Forms → Zapier → CRM</p></div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div><h4>Qualification call (15 min)</h4><p>Quick BANT check: Budget confirmed? Authority to decide? Need (specific pain)? Timeline (within 6 months?). Disqualify fast — don't waste demo slots on non-buyers. Tool: Calendly for booking, Notion for call notes</p></div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div><h4>Industry-specific demo (45 min)</h4><p>Show ERPNext pre-configured for their industry. Walk through their top 3 pain points. Always end with: "Does this solve what you described?" and "Who else needs to see this before a decision?" Tool: Loom for async follow-up demo recording</p></div>
+    </div>
+    <div class="step">
+      <div class="step-num">5</div>
+      <div><h4>Proposal + pilot offer</h4><p>Send within 24 hours of demo. Include: scope, timeline, 3 pricing tiers (Basic / Standard / Enterprise), ROI projection for their specific numbers. Offer the paid pilot as a low-risk entry point. Tool: Proposify or PandaDoc</p></div>
+    </div>
+    <div class="step">
+      <div class="step-num">6</div>
+      <div><h4>Follow-up sequence (7–21 days)</h4><p>Day 1: Proposal sent + Loom walkthrough. Day 4: Check-in, share a relevant case study. Day 10: "Did the team get a chance to review?" Day 18: Breakup email with final offer. Tool: HubSpot or Zoho CRM sequences</p></div>
+    </div>
+    <div class="step">
+      <div class="step-num">7</div>
+      <div><h4>Close + onboarding kickoff</h4><p>Contract signed → kickoff call within 48 hours (while excitement is high). Start discovery immediately. Never let a signed deal go cold. Tool: Frappe Projects or ClickUp for project tracking, Zoho Sign for contracts</p></div>
+    </div>
+  </div>
+  <div class="grid2">
+    <div class="card">
+      <h3>CRM + automation stack</h3>
+      <ul>
+        <li><strong>CRM:</strong> HubSpot Free or Zoho CRM</li>
+        <li><strong>Email sequences:</strong> Instantly.ai or Smartlead</li>
+        <li><strong>LinkedIn outreach:</strong> Expandi or Dripify</li>
+        <li><strong>Lead enrichment:</strong> Apollo.io</li>
+        <li><strong>Demo scheduling:</strong> Calendly</li>
+        <li><strong>Proposals:</strong> PandaDoc</li>
+        <li><strong>Analytics:</strong> Google Analytics + HotJar on landing pages</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Conversion benchmarks</h3>
+      <div class="row" style="margin-top:6px"><span style="font-size:12px;width:160px">Cold outreach → reply</span><div class="bar-wrap"><div class="bar bar-amber" style="width:15%"></div></div><span style="font-size:12px">5–15%</span></div>
+      <div class="row"><span style="font-size:12px;width:160px">Reply → qual call</span><div class="bar-wrap"><div class="bar bar-blue" style="width:40%"></div></div><span style="font-size:12px">40%</span></div>
+      <div class="row"><span style="font-size:12px;width:160px">Qual call → demo</span><div class="bar-wrap"><div class="bar bar-teal" style="width:60%"></div></div><span style="font-size:12px">60%</span></div>
+      <div class="row"><span style="font-size:12px;width:160px">Demo → proposal</span><div class="bar-wrap"><div class="bar bar-green" style="width:70%"></div></div><span style="font-size:12px">70%</span></div>
+      <div class="row"><span style="font-size:12px;width:160px">Proposal → close</span><div class="bar-wrap"><div class="bar bar-purple" style="width:25%"></div></div><span style="font-size:12px">20–30%</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 8: MISTAKES -->
+<div id="mistakes" class="panel">
+  <div class="card">
+    <h3>8 critical mistakes — and how NexaFlowTech avoids them</h3>
+
+    <div class="mistake">
+      <strong style="font-size:13px;color:var(--color-text-danger)">Mistake 1: Generic "we implement ERPNext" positioning</strong>
+      <p style="margin-top:4px">Agencies say "we do ERPNext" — every other agency says the same. No differentiation.</p>
+    </div>
+    <div class="fix">
+      <strong style="font-size:13px;color:var(--color-text-success)">Fix:</strong>
+      <p style="margin-top:4px">Niche down by industry. Be "ERPNext for Manufacturing companies in Gujarat" or "ERPNext for FMCG distributors." Specificity converts 3x better.</p>
+    </div>
+
+    <div class="mistake" style="margin-top:10px">
+      <strong style="font-size:13px;color:var(--color-text-danger)">Mistake 2: Leading with features in outreach</strong>
+      <p style="margin-top:4px">"ERPNext has 15 modules including HR, CRM, Accounts..." — nobody cares until they feel the pain.</p>
+    </div>
+    <div class="fix">
+      <strong style="font-size:13px;color:var(--color-text-success)">Fix:</strong>
+      <p style="margin-top:4px">Lead with their pain. "How are you handling multi-warehouse reconciliation today?" is more powerful than any feature list.</p>
+    </div>
+
+    <div class="mistake" style="margin-top:10px">
+      <strong style="font-size:13px;color:var(--color-text-danger)">Mistake 3: Giving demos to unqualified leads</strong>
+      <p style="margin-top:4px">Spending 45 minutes showing ERPNext to someone who has no budget or no authority to decide.</p>
+    </div>
+    <div class="fix">
+      <strong style="font-size:13px;color:var(--color-text-success)">Fix:</strong>
+      <p style="margin-top:4px">Always run a 15-minute qualification call first. BANT qualify: Budget, Authority, Need, Timeline. If two fail, don't demo.</p>
+    </div>
+
+    <div class="mistake" style="margin-top:10px">
+      <strong style="font-size:13px;color:var(--color-text-danger)">Mistake 4: Sending generic ERPNext demos</strong>
+      <p style="margin-top:4px">Showing the default ERPNext demo instance is underwhelming. Prospects can't visualize their business in it.</p>
+    </div>
+    <div class="fix">
+      <strong style="font-size:13px;color:var(--color-text-success)">Fix:</strong>
+      <p style="margin-top:4px">Pre-configure industry-specific demo environments. A textile demo should have BOM for fabric, a real estate demo should show project cost tracking.</p>
+    </div>
+
+    <div class="mistake" style="margin-top:10px">
+      <strong style="font-size:13px;color:var(--color-text-danger)">Mistake 5: Slow follow-up after demo</strong>
+      <p style="margin-top:4px">Sending the proposal 5 days after the demo — the prospect's excitement is gone and competitors have moved in.</p>
+    </div>
+    <div class="fix">
+      <strong style="font-size:13px;color:var(--color-text-success)">Fix:</strong>
+      <p style="margin-top:4px">Send proposal within 24 hours, include a Loom recap video of the demo walking through their specific pain points. Follow up on Day 4, Day 10, Day 18.</p>
+    </div>
+
+    <div class="mistake" style="margin-top:10px">
+      <strong style="font-size:13px;color:var(--color-text-danger)">Mistake 6: Competing on price with low-cost developers</strong>
+      <p style="margin-top:4px">Trying to win by being the cheapest — attracts the worst clients and destroys margins.</p>
+    </div>
+    <div class="fix">
+      <strong style="font-size:13px;color:var(--color-text-success)">Fix:</strong>
+      <p style="margin-top:4px">Compete on outcome, not price. "Our implementation reduces your inventory discrepancy by X%" is worth more than "we're ₹2L cheaper." Show ROI, not rates.</p>
+    </div>
+
+    <div class="mistake" style="margin-top:10px">
+      <strong style="font-size:13px;color:var(--color-text-danger)">Mistake 7: No case studies or social proof</strong>
+      <p style="margin-top:4px">Agencies with zero published case studies lose deals to agencies with even one well-documented success story.</p>
+    </div>
+    <div class="fix">
+      <strong style="font-size:13px;color:var(--color-text-success)">Fix:</strong>
+      <p style="margin-top:4px">Document every implementation as a case study — even internal ones. Format: Client industry + Problem → ERPNext solution → Measurable outcome (₹ saved, time reduced, errors eliminated).</p>
+    </div>
+
+    <div class="mistake" style="margin-top:10px">
+      <strong style="font-size:13px;color:var(--color-text-danger)">Mistake 8: No retainer / post-go-live engagement</strong>
+      <p style="margin-top:4px">Closing a one-time implementation and moving on — missing the highest-margin revenue: AMC, support, and customization expansions.</p>
+    </div>
+    <div class="fix">
+      <strong style="font-size:13px;color:var(--color-text-success)">Fix:</strong>
+      <p style="margin-top:4px">Every implementation contract should include an AMC offer (Annual Maintenance Contract) and a 6-month customization retainer. Existing clients cost 5x less to expand than acquiring new ones.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+function show(id) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
